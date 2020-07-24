@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'redux-react-hook';
 import { Input, Form, Button, Row, Col, message } from "antd";
+import { getCaptcha} from '../../actions/register';
 import styles from "./index.module.less";
 
 const InputItem = React.forwardRef( (props, ref) => {
+  const dispatch = useDispatch();
   const { name, rules, ...rest } = props;
   const [timing, setTiming] = useState(false); // Whether in countdown
   const [count, setCount] = useState(props.countDown || 60); // Countdown seconds
   const handleClickCaptcha = () => {
     message.success("Successfully sent captcha 1234");
+    dispatch(getCaptcha());
     setTiming(true);
   };
 
@@ -29,28 +33,6 @@ const InputItem = React.forwardRef( (props, ref) => {
     }
   }, [timing, props.countDown]);
 
-  // useEffect(() => {
-  //   let interval = 0;
-  //   // if timing from false to true, begin count down
-  //   if (timing) {
-  //     interval = setInterval(() => {
-  //       // for each second, count will minus one
-  //       setCount((preSecond) => {
-  //         // The last one second, countdown finish
-  //         if (preSecond <= 1) {
-  //           setTiming(false);
-  //           clearInterval(interval);
-  //           return props.countDown || 60;
-  //         }
-  //         return preSecond - 1;
-  //       });
-  //     }, 1000);
-  //   }
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [timing]);
 
   if (name === "captcha") {
     return (

@@ -1,0 +1,1 @@
+export const HOST = 'http://123.57.164.163:9088/hlz';
