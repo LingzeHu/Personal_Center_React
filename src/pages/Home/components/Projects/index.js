@@ -1,7 +1,6 @@
 import React from "react";
 import { List, Card } from "antd";
 import moment from 'moment';
-import styles from "./index.module.less";
 
 const Projects = ({ list }) => {
   return (
@@ -13,7 +12,7 @@ const Projects = ({ list }) => {
         <List.Item>
           <Card hoverable cover={<img alt={item.title} src={item.cover} />}>
             <Card.Meta
-              title={<a>{item.title}</a>}
+              title={<a href="/">{item.title}</a>}
               description={item.subDescription}
             />
             <div>

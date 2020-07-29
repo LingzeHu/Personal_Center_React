@@ -14,21 +14,21 @@ const itemMenu = (
     <Menu.Item>
       <a
         target="_blank"
-        rel="noopener norefeerer"
+        rel="noopener noreferrer"
         href="https://www.alipay.com"
       >
         1st Menu Item
       </a>
       <a
         target="_blank"
-        rel="noopener norefeerer"
+        rel="noopener noreferrer"
         href="https://www.alipay.com"
       >
         2nd Menu Item
       </a>
       <a
         target="_blank"
-        rel="noopener norefeerer"
+        rel="noopener noreferrer"
         href="https://www.alipay.com"
       >
         3rd Menu Item

@@ -4,6 +4,10 @@ import SubmitButton from "../../components/SubmitButton";
 import styles from "./index.module.less";
 import { Form, Popover, Progress, Row, Select, Col } from "antd";
 import {Link} from 'react-router-dom';
+import { useDispatch } from 'redux-react-hook';
+import { getCaptcha, register } from '../../actions/account';
+
+
 
 const {Option} = Select;
 const passwordStatusMap = {
@@ -19,28 +23,17 @@ const passwordProgressMap = {
 };
 
 const Register = () => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [popover, setPopover] = useState(false);
   const [form] = Form.useForm();
   const [prefix, setPrefix] = useState('86');
   const checkConfirm = (_, value) => {
     const promise = Promise;
-    if (value && value !== form.getFieldsValue("password")) {
+    if (value && value !== form.getFieldValue("password")) {
       return promise.reject("The passwords are not matched");
     }
     return promise.resolve();
-  };
-
-  const getPasswordStatus = () => {
-    const value = form.getFieldValue("password");
-    if (value && value.length > 9) {
-      return "ok";
-    }
-    if (value && value.length > 5) {
-      return "pass";
-    }
-
-    return "poor";
   };
 
   const checkPassword = (_, value) => {
@@ -62,6 +55,18 @@ const Register = () => {
     return promise.resolve();
   };
 
+  const getPasswordStatus = () => {
+    const value = form.getFieldValue("password");
+    if (value && value.length > 9) {
+      return "ok";
+    }
+    if (value && value.length > 5) {
+      return "pass";
+    }
+
+    return "poor";
+  };
+
   const renderPasswordProgress = () => {
     const value = form.getFieldValue("password");
     const passwordStatus = getPasswordStatus();
@@ -81,13 +86,34 @@ const Register = () => {
     );
   };
 
-  const handleFinish = () => {};
+  const handleClickCaptcha = () => {
+    form.validateFields(['username', 'email', 'password'])
+      .then(() => {
+        dispatch(getCaptcha(form.getFieldsValue(['username', 'email', 'password'])));
+      })
+  }
+
+  const handleFinish = (values) => {
+    dispatch(register(values));
+  };
   return (
     <div className={styles.registerContainer}>
       <div className={styles.register}>
         <Form form={form} onFinish={handleFinish}>
           <InputItem
-            name="mail"
+            name="username"
+            placeholder="Username"
+            size="large"
+            rules={[
+              {
+                required: true,
+                message: "Please input the username",
+              },
+            ]}
+          />
+          
+          <InputItem
+            name="email"
             placeholder="EMail"
             size="large"
             rules={[
@@ -117,9 +143,8 @@ const Register = () => {
           >
             <InputItem
               name="password"
-              placeholder="At least 6 digits"
+              placeholder="Password, At least 6 digits"
               size="large"
-              type="password"
               rules={[
                 {
                   validator: checkPassword,
@@ -131,7 +156,6 @@ const Register = () => {
             name="confirm"
             placeholder="Confirm the password"
             size="large"
-            type="confirm"
             rules={[
               {
                 required: true,
@@ -184,11 +208,12 @@ const Register = () => {
                     message: "Please input the Captcha",
                   },
                 ]}
+                onClick={handleClickCaptcha}
               />
 
          <Row justify='space-between' align='middle' >
             <Col span={8}>
-            <SubmitButton>Register</SubmitButton>
+            <SubmitButton >Register</SubmitButton>
             </Col>
             <Col span={16}>
                 <Link className={styles.login} to='/login'>

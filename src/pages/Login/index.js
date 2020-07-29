@@ -5,13 +5,16 @@ import { UserOutlined, LockOutlined, MailOutlined, MobileOutlined, WeiboOutlined
 import styles from "./index.module.less";
 import InputItem from "../../components/InputItem";
 import SubmitButton from "../../components/SubmitButton";
+import { login } from "../../actions/account";
+import { useDispatch } from 'redux-react-hook';
 
 const { TabPane } = Tabs;
 const Login = () => {
+  const dispatch = useDispatch();
   const [autoLogin, setAutoLogin] = useState(true);
   const [form] = Form.useForm();
   const handleFinish = (values) => {
-    console.log(values);
+    dispatch(login(values));
   };
 
   return (
